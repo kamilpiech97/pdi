@@ -1,4 +1,22 @@
+import collections
+import csv
+import json
+
 from src.places import City, Street
+
+
+class Province(object):
+    def __init__(self, code, name):
+        self.code = code
+        self.name = name
+
+
+provinces = [Province("02", "dolnośląskie"), Province("04", "kujawsko-pomorskie"), Province("06", "lubuskie"),
+             Province("10", "łódzkie"), Province("06", "lubelskie"), Province("12", "małopolskie"),
+             Province("14", "mazowieckie"), Province("16", "opolskie"), Province("20", "podlaskie"),
+             Province("18", "podkarpackie"), Province("22", "pomorskie"), Province("26", "świętokrzyskie"),
+             Province("24", "śląskie"), Province("28", "warmińsko-mazurskie"), Province("30", "wielkopolskie"),
+             Province("32", "zachodniopomorskie")]
 
 
 class Cities(object):
@@ -44,3 +62,41 @@ class Streets(object):
                     street = Street(line)
                     street.set_city(self.cities.find_by_id(street.city_id))
                     yield street
+
+    def find_by_street_name_and_wojewodztwo(self, street_name, wojewodztwo):
+        with open(self.file, encoding="utf-8") as fp:
+            lines = fp.readlines()
+            for line in lines:
+                if wojewodztwo in line.lower():
+                    if street_name.lower() in line.lower():
+                        street = Street(line)
+                        street.set_city(self.cities.find_by_id(street.city_id))
+                        yield street
+
+    def find_100_popular_streets(self):
+        results = []
+        with open(self.file) as file_cities:
+            file_read = csv.reader(file_cities, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            array = list(file_read)
+            for row in array[1:-1]:
+                results.append(row[8] + " " + row[7])
+
+            occurrences = collections.Counter(results)
+
+            for letter, count in occurrences.most_common(100):
+                print('%s: %7d' % (letter, count))
+
+    def find_popular_streets_per_province(self):
+
+        with open(self.file) as file_cities:
+            file_read = csv.reader(file_cities, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            array = list(file_read)
+            for province in provinces:
+                results = []
+                for row in array[1:-1]:
+                    if row[0] == province.code:
+                        results.append(row[8] + " " + row[7])
+                occurrences = collections.Counter(results)
+
+                for letter, count in occurrences.most_common(1):
+                    print('%s: %s - %d' % (province.name, letter, count))
