@@ -76,7 +76,7 @@ class Streets(object):
     def find_100_popular_streets(self):
         results = []
         with open(self.file) as file_cities:
-            file_read = csv.reader(file_cities, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             array = list(file_read)
             for row in array[1:-1]:
                 results.append(row[8] + " " + row[7])
@@ -89,7 +89,7 @@ class Streets(object):
     def find_popular_streets_per_province(self):
 
         with open(self.file) as file_cities:
-            file_read = csv.reader(file_cities, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             array = list(file_read)
             for province in provinces:
                 results = []
@@ -100,3 +100,26 @@ class Streets(object):
 
                 for letter, count in occurrences.most_common(1):
                     print('%s: %s - %d' % (province.name, letter, count))
+
+    def duplicated_street_in_city(self):
+        results = []
+        with open(self.file) as file_cities:
+            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            array = list(file_read)
+            for row in array[1:-1]:
+                results.append(row[7] + "+" + row[4])
+
+            occurrences = collections.Counter(results)
+
+            for letter, count in occurrences.most_common(10):
+                if count > 1:
+                    first = 1
+                    for row in array[1:-1]:
+                        if (row[7] + "+" + row[4]) == letter:
+                            if first == 1:
+                                print("\n++++++++++++++++")
+                                print(self.cities.find_by_id(row[4]))
+                                print("++++++++++++++++")
+                                first = 0
+
+                            print(row[6]+" "+row[8] + " " + row[7])

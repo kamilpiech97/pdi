@@ -8,10 +8,10 @@ class City(object):
 
 class Street(object):
     def __init__(self, properties):
-        self.prefix = properties.split(";")[6]
-        self.additional_name = properties.split(";")[8]
-        self.proper_name = properties.split(";")[7]
-        self.city_id = properties.split(";")[4]
+        self.prefix = properties.split(",")[6]
+        self.additional_name = properties.split(",")[8]
+        self.proper_name = properties.split(",")[7]
+        self.city_id = properties.split(",")[4]
         self.city = None
 
     def get_full_name(self):
