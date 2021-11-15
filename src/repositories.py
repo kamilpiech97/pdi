@@ -36,6 +36,34 @@ class Cities(object):
 
         return City("? (" + city_id + ")")
 
+    def find_most_popular_city_per_province(self):
+
+        with open(self.file) as file:
+            file_read = csv.reader(file, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            array = list(file_read)
+            for province in provinces:
+                results = []
+                for row in array[1:-1]:
+                    if row[0] == province.code:
+                        results.append(row[6])
+                occurrences = collections.Counter(results)
+
+                for letter, count in occurrences.most_common(1):
+                    print('%s: %s - %d' % (province.name, letter, count))
+
+    def find_10_popular_cities(self):
+        results = []
+        with open(self.file) as file:
+            file_read = csv.reader(file, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+            array = list(file_read)
+            for row in array[1:-1]:
+                results.append(row[6])
+
+            occurrences = collections.Counter(results)
+
+            for letter, count in occurrences.most_common(10):
+                print('%s: %7d' % (letter, count))
+
     @staticmethod
     def __find_exact_city(lines, city_id):
         for line in lines:
@@ -75,8 +103,8 @@ class Streets(object):
 
     def find_100_popular_streets(self):
         results = []
-        with open(self.file) as file_cities:
-            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+        with open(self.file) as file:
+            file_read = csv.reader(file, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             array = list(file_read)
             for row in array[1:-1]:
                 results.append(row[8] + " " + row[7])
@@ -88,8 +116,8 @@ class Streets(object):
 
     def find_popular_streets_per_province(self):
 
-        with open(self.file) as file_cities:
-            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+        with open(self.file) as file:
+            file_read = csv.reader(file, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             array = list(file_read)
             for province in provinces:
                 results = []
@@ -103,8 +131,8 @@ class Streets(object):
 
     def duplicated_street_in_city(self):
         results = []
-        with open(self.file) as file_cities:
-            file_read = csv.reader(file_cities, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
+        with open(self.file) as file:
+            file_read = csv.reader(file, delimiter=',', quoting=csv.QUOTE_ALL, skipinitialspace=True)
             array = list(file_read)
             for row in array[1:-1]:
                 results.append(row[7] + "+" + row[4])
@@ -122,4 +150,4 @@ class Streets(object):
                                 print("++++++++++++++++")
                                 first = 0
 
-                            print(row[6]+" "+row[8] + " " + row[7])
+                            print(row[6] + " " + row[8] + " " + row[7])

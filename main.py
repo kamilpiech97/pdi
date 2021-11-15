@@ -34,3 +34,7 @@ elif menu_choose == "3":
     streets.find_popular_streets_per_province()
 elif menu_choose == "4":
     streets.duplicated_street_in_city()
+elif menu_choose == "5":
+    cities.find_most_popular_city_per_province()
+elif menu_choose == "6":
+    cities.find_10_popular_cities()
