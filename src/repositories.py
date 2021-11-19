@@ -11,7 +11,7 @@ class Province(object):
         self.name = name
 
 
-provinces = [Province("02", "dolnośląskie"), Province("04", "kujawsko-pomorskie"), Province("06", "lubuskie"),
+provinces = [Province("2", "dolnośląskie"), Province("4", "kujawsko-pomorskie"), Province("6", "lubuskie"),
              Province("10", "łódzkie"), Province("06", "lubelskie"), Province("12", "małopolskie"),
              Province("14", "mazowieckie"), Province("16", "opolskie"), Province("20", "podlaskie"),
              Province("18", "podkarpackie"), Province("22", "pomorskie"), Province("26", "świętokrzyskie"),
@@ -51,7 +51,7 @@ class Cities(object):
                 for letter, count in occurrences.most_common(1):
                     print('%s: %s - %d' % (province.name, letter, count))
 
-    def find_10_popular_cities(self):
+    def find_100_popular_cities(self):
         results = []
         with open(self.file) as file:
             file_read = csv.reader(file, delimiter=';', quoting=csv.QUOTE_ALL, skipinitialspace=True)
@@ -61,7 +61,7 @@ class Cities(object):
 
             occurrences = collections.Counter(results)
 
-            for letter, count in occurrences.most_common(10):
+            for letter, count in occurrences.most_common(100):
                 print('%s: %7d' % (letter, count))
 
     @staticmethod
